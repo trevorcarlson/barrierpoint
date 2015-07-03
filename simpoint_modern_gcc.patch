@@ -1,0 +1,51 @@
+--- SimPoint.3.2/analysiscode/CmdLineParser.cpp	2015-07-03 15:39:50.764058631 +0200
++++ SimPoint.3.2/analysiscode/CmdLineParser.cpp	2015-07-03 15:40:08.836997324 +0200
+@@ -71,6 +71,7 @@
+ 
+ 
+ #include "CmdLineParser.h"
++#include <string.h>
+ 
+ bool CmdLineParser::parseCmdLine(int argc, char **argv) {
+     for (int argNdx = 0; argNdx < argc; argNdx++) {
+--- SimPoint.3.2/analysiscode/Datapoint.h	2015-07-03 15:40:43.998824146 +0200
++++ SimPoint.3.2/analysiscode/Datapoint.h	2015-07-03 15:41:00.519682904 +0200
+@@ -83,6 +83,7 @@
+ 
+ #include <vector>
+ #include <cstdio>
++#include <iostream>
+ 
+ using namespace std;
+ 
+--- SimPoint.3.2/analysiscode/Dataset.h	2015-07-03 15:41:12.052281565 +0200
++++ SimPoint.3.2/analysiscode/Dataset.h	2015-07-03 15:41:23.860895020 +0200
+@@ -83,6 +83,7 @@
+ 
+ #include "Datapoint.h"
+ #include <vector>
++#include <iostream>
+ 
+ class Dataset : public vector<Datapoint> {
+     public:
+--- SimPoint.3.2/analysiscode/FVParser.cpp	2015-07-03 15:42:00.870817376 +0200
++++ SimPoint.3.2/analysiscode/FVParser.cpp	2015-07-03 15:42:16.595635028 +0200
+@@ -79,6 +79,7 @@
+ #include "FVParser.h"
+ #include "Utilities.h"
+ #include <string>
++#include <string.h>
+ 
+ // take care of a difference between G++ 2.96 and 3.x
+ #if (__GNUC__ >= 3)
+--- SimPoint.3.2/analysiscode/Utilities.h	2015-07-03 15:38:25.883648960 +0200
++++ SimPoint.3.2/analysiscode/Utilities.h	2015-07-03 15:39:34.059190492 +0200
+@@ -86,6 +86,8 @@
+ #include "Dataset.h"
+ #include "Logger.h"
+ #include <string>
++#include <stdlib.h>
++#include <limits.h>
+ 
+ string toString(int i);
+ string toString(double d);
