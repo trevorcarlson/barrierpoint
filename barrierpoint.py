@@ -29,17 +29,17 @@ def log(config, *args):
 def make_mt_pinball(config):
   mkdir_s(os.path.dirname(config['whole_basename']))
   # pages_early, whole_image and whole_stack are not working properly
-  cmd = '%(pin_kit)s/pin -xyzzy -t %(pin_kit)s/extras/pinplay/bin/intel64/pinplay-driver.so -log -log:basename "%(whole_basename)s" -log:compressed bzip2 -log:pages_early 1 -log:whole_image 1 -log:whole_stack 0 -- %(app_cmd)s' % config
+  cmd = '%(pin_bin)s -xyzzy -t %(pin_kit)s/extras/pinplay/bin/intel64/pinplay-driver.so -log -log:basename "%(whole_basename)s" -log:compressed bzip2 -log:pages_early 1 -log:whole_image 1 -log:whole_stack 0 -- %(app_cmd)s' % config
   ex_log(cmd, config)
 
 def gen_bbv(config):
   mkdir_s(os.path.dirname(config['bbv_basename']))
-  cmd = '%(pin_kit)s/pin -xyzzy -reserve_memory %(whole_basename)s.address -t %(pintool_bbv)s -replay -replay:basename %(whole_basename)s -roi 1 -o %(bbv_basename)s -- %(pin_kit)s/extras/pinplay/bin/intel64/nullapp' % config
+  cmd = '%(pin_bin)s -xyzzy -reserve_memory %(whole_basename)s.address -t %(pintool_bbv)s -replay -replay:basename %(whole_basename)s -roi 1 -o %(bbv_basename)s -- %(pin_kit)s/extras/pinplay/bin/intel64/nullapp' % config
   ex_log(cmd, config)
 
 def gen_ldv(config):
   mkdir_s(os.path.dirname(config['ldv_basename']))
-  cmd = '%(pin_kit)s/pin -xyzzy -reserve_memory %(whole_basename)s.address -t %(pintool_reuse_distance)s -replay -replay:basename %(whole_basename)s -roi 1 -o %(ldv_basename)s -- %(pin_kit)s/extras/pinplay/bin/intel64/nullapp' % config
+  cmd = '%(pin_bin)s -xyzzy -reserve_memory %(whole_basename)s.address -t %(pintool_reuse_distance)s -replay -replay:basename %(whole_basename)s -roi 1 -o %(ldv_basename)s -- %(pin_kit)s/extras/pinplay/bin/intel64/nullapp' % config
   ex_log(cmd, config)
 
 def combine_to_sv(config):
@@ -60,7 +60,7 @@ def cluster(config):
 
 def gen_pinball_regions(config):
   mkdir_s(os.path.dirname(config['pinball_regions_file_in']))
-  cmd = '%(pin_kit)s/pin -xyzzy -reserve_memory %(whole_basename)s.address -t %(pintool_icount)s -replay -replay:basename %(whole_basename)s -icountfile %(pinball_regions_file_in)s -- %(pin_kit)s/extras/pinplay/bin/intel64/nullapp' % config
+  cmd = '%(pin_bin)s -xyzzy -reserve_memory %(whole_basename)s.address -t %(pintool_icount)s -replay -replay:basename %(whole_basename)s -icountfile %(pinball_regions_file_in)s -- %(pin_kit)s/extras/pinplay/bin/intel64/nullapp' % config
   ex_log(cmd, config)
 
 def gen_pinballs(config, gen_warmup = True):
@@ -135,7 +135,7 @@ def gen_pinballs(config, gen_warmup = True):
 
   for itr in itertools.count():
     # pages_early, whole_image and whole_stack are not working properly
-    cmd = '%(pin_kit)s/pin -xyzzy -reserve_memory %(whole_basename)s.address -t %(pin_kit)s/extras/pinplay/bin/intel64/pinplay-driver.so -replay -replay:basename %(whole_basename)s -log -log:basename "%(barrierpoint_basename)s" -log:compressed bzip2 -log:regions:verbose 1 -log:regions:in %(bp_regions_file_in)s -log:region_id 1 -log:regions:out %(bp_regions_file_out)s -log:pages_early 1 -log:whole_image 1 -log:whole_stack 0 -- %(pin_kit)s/extras/pinplay/bin/intel64/nullapp' % config
+    cmd = '%(pin_bin)s -xyzzy -reserve_memory %(whole_basename)s.address -t %(pin_kit)s/extras/pinplay/bin/intel64/pinplay-driver.so -replay -replay:basename %(whole_basename)s -log -log:basename "%(barrierpoint_basename)s" -log:compressed bzip2 -log:regions:verbose 1 -log:regions:in %(bp_regions_file_in)s -log:region_id 1 -log:regions:out %(bp_regions_file_out)s -log:pages_early 1 -log:whole_image 1 -log:whole_stack 0 -- %(pin_kit)s/extras/pinplay/bin/intel64/nullapp' % config
     ex_log(cmd, config)
 
     # Are there any regions that we not processed?
@@ -293,6 +293,11 @@ def run(prefix, app_cmd):
   for pintool in ('pintool_bbv', 'pintool_reuse_distance', 'pintool_icount'):
     if not os.path.isfile(config[pintool]):
       raise RuntimeError('Cannot file pintool [%s], set the %s environment variable appropriately' % (config[pintool], pintool.upper()))
+
+  if os.path.isfile(os.path.join(config['pin_kit'],'pin.sh')):
+    config['pin_bin'] = os.path.join(config['pin_kit'],'pin.sh')
+  else:
+    config['pin_bin'] = os.path.join(config['pin_kit'],'pin')
 
   log(config, 'Running command:', app_cmd)
 
