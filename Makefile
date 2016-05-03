@@ -9,6 +9,10 @@ ifeq ($(PIN_ROOT),)
  $(error "Please set $$PIN_ROOT")
 endif
 
+PINTOOL_ICOUNT_DIR=tool_barrier_icount
+PINTOOL_BBV_DIR=tool_barrier_bbv
+PINTOOL_REUSE_DISTANCE_DIR=tool_barrier_reuse_distance
+
 PINTOOL_ICOUNT=tool_barrier_icount/barrier_icount.so
 export PINTOOL_ICOUNT
 PINTOOL_BBV=tool_barrier_bbv/tool_barrier_bbv.so
@@ -20,13 +24,13 @@ all: $(PINTOOL_ICOUNT) $(PINTOOL_BBV) $(PINTOOL_REUSE_DISTANCE) matrix-omp simpo
 	./barrierpoint.py -- ./matrix-omp
 
 $(PINTOOL_ICOUNT):
-	make -C tool_barrier_icount
+	make -C $(PINTOOL_ICOUNT_DIR)
 
 $(PINTOOL_BBV):
-	make -C tool_barrier_bbv
+	make -C $(PINTOOL_BBV_DIR)
 
 $(PINTOOL_REUSE_DISTANCE):
-	make -C tool_barrier_reuse_distance
+	make -C $(PINTOOL_REUSE_DISTANCE_DIR)
 
 $(PIN_ROOT)/extras/pinplay/bin/intel64/pinplay-driver.so:
 	make -C $(PIN_ROOT)/extras/pinplay/examples
@@ -41,6 +45,9 @@ matrix-omp: $(SNIPER_ROOT)/include/sim_api.h $(PIN_ROOT)/extras/pinplay/bin/inte
 	g++ -g -O3 -fopenmp -I$(SNIPER_ROOT)/include -o matrix-omp matrix-omp.cpp
 
 clean:
+	$(MAKE) -C $(PINTOOL_ICOUNT_DIR) clean
+	$(MAKE) -C $(PINTOOL_BBV_DIR) clean
+	$(MAKE) -C $(PINTOOL_REUSE_DISTANCE_DIR) clean
 	rm -rf work ./matrix-omp pintool.log
 
 distclean: clean
