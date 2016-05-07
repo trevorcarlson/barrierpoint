@@ -1,22 +1,18 @@
 // From: http://blog.speedgocomputing.com/2010/08/parallelizing-matrix-multiplication.html
 
 #include "sim_api.h"
+#include "matrix-omp.h"
 
-/* matrix-omp.cpp */
-const int size = 100;
-const int size2 = 75;
-const int iterations = 20;
-
-float a[size][size];
-float b[size][size];
-float c[size][size];
-
-float d[size2][size2];
-float e[size2][size2];
-float f[size2][size2];
+#include <omp.h>
 
 int main()
 {
+    init();
+
+    // From http://stackoverflow.com/questions/11095309/openmp-set-num-threads-is-not-working
+    omp_set_dynamic(0);     // Explicitly disable dynamic teams
+    omp_set_num_threads(4); // Use 4 threads for all consecutive parallel regions
+
     // Initialize buffers.
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {

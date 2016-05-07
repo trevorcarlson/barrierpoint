@@ -43,8 +43,11 @@ simpoint:
 	make -C SimPoint.3.2
 	ln -s SimPoint.3.2/bin/simpoint ./simpoint
 
-matrix-omp: matrix-omp.cpp $(SNIPER_ROOT)/include/sim_api.h $(PIN_ROOT)/extras/pinplay/bin/intel64/pinplay-driver.so
-	$(CXX) -g -O3 -fopenmp -I$(SNIPER_ROOT)/include -o matrix-omp matrix-omp.cpp
+matrix-omp-init.o: matrix-omp-init.cpp
+	$(CXX) -g -O3 -fopenmp -I$(SNIPER_ROOT)/include -c -o matrix-omp-init.o matrix-omp-init.cpp
+
+matrix-omp: matrix-omp.cpp matrix-omp.h matrix-omp-init.o $(SNIPER_ROOT)/include/sim_api.h $(PIN_ROOT)/extras/pinplay/bin/intel64/pinplay-driver.so
+	$(CXX) -g -O3 -fopenmp -I$(SNIPER_ROOT)/include -o matrix-omp matrix-omp-init.o matrix-omp.cpp
 
 cleanwork:
 	rm -rf work pintool.log
