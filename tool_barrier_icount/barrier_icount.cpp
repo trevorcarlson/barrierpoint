@@ -139,6 +139,12 @@ VOID traceCallback(TRACE trace, VOID *v)
             {
                INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)saveICount, IARG_THREAD_ID, IARG_BOOL, false, IARG_END);
             }
+
+            // GOMP 4.0
+            if ((appFuncData.GOMP_parallel != 0) && (INS_Address(ins) == appFuncData.GOMP_parallel))
+            {
+               INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)saveICount, IARG_THREAD_ID, IARG_BOOL, false, IARG_END);
+            }
          }
       }
    }

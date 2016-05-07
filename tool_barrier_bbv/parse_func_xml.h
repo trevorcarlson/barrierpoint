@@ -8,6 +8,7 @@ struct funcData
    uint64_t main;
    uint64_t exit;
    uint64_t GOMP_parallel_start;
+   uint64_t GOMP_parallel;
 };
 
 funcData parseFuncData(std::string fn);

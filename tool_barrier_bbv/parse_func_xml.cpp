@@ -90,6 +90,10 @@ funcData parseFuncData(std::string fn)
          {
             f.GOMP_parallel_start = parseBase(symbol);
          }
+         else if (val == "GOMP_parallel")
+         {
+            f.GOMP_parallel = parseBase(symbol);
+         }
       }
    }
 

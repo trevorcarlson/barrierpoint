@@ -235,6 +235,12 @@ VOID traceCallback(TRACE trace, VOID *v)
             {
                INS_InsertPredicatedCall(ins, IPOINT_AFTER, (AFUNPTR)multiApplicationOMPCallback, IARG_THREAD_ID, IARG_END);
             }
+
+            // GOMP 4.0
+            if ((appFuncData.GOMP_parallel != 0) && (INS_Address(ins) == appFuncData.GOMP_parallel))
+            {
+               INS_InsertPredicatedCall(ins, IPOINT_AFTER, (AFUNPTR)multiApplicationOMPCallback, IARG_THREAD_ID, IARG_END);
+            }
 	 }
       }
    }
