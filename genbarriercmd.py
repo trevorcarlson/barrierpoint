@@ -27,7 +27,11 @@ def gensimpointdata(bbfile = 'bbvbarrier.bb.gz', fixedlength = 'off', deletesimp
     fixedlength = {False:'off',True:'on'}[bool(fixedlength)]
 
   simpointcmd = './%s -loadFVFile "%s" -inputVectorsGzipped -fixedLength %s -maxK %d -dim %s -coveragePct 1.0 -saveSimpoints ./t.simpoints -saveSimpointWeights ./t.weights -saveLabels t.labels -verbose 5 %s' % (simpointcmd, bbfile, fixedlength, maxk, dim, ' '.join(extraopts))
-  os.system(simpointcmd)
+  rc = os.system(simpointcmd)
+  rc = rc >> 8
+
+  if rc != 0:
+    raise RuntimeError('gensimpointdata(): Simpoint returned invalid return code (rc=%s)' % rc)
 
   simpointdata = {}
   simpointdata['id'] = []
