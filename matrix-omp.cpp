@@ -27,8 +27,8 @@ int main()
     }
 
     // Initialize buffers.
-    for (int i = 0; i < size; ++i) {
-        for (int j = 0; j < size; ++j) {
+    for (int i = 0; i < size2; ++i) {
+        for (int j = 0; j < size2; ++j) {
             d[i][j] = (float)i + j;
             e[i][j] = (float)i - j;
             f[i][j] = 0.0f;
