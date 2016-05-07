@@ -274,7 +274,7 @@ def run(prefix, app_cmd):
   config['log_file'] = 'work/log.txt'
 
   config['pin_kit'] = os.getenv('PIN_ROOT') or '/scratch/tcarlson/prog/sniper-barrierpoint/pin_kit'
-  config['pin_options'] = '-xyzzy -ifeellucky'
+  config['pin_options'] = '-xyzzy -ifeellucky -injection child'
 
   config['sniper_root'] = os.getenv('SNIPER_ROOT') or '/scratch/tcarlson/prog/sniper-barrierpoint'
   config['sniper_output_dir'] = 'work/sniper'
