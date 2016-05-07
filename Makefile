@@ -46,13 +46,16 @@ simpoint:
 matrix-omp: matrix-omp.cpp $(SNIPER_ROOT)/include/sim_api.h $(PIN_ROOT)/extras/pinplay/bin/intel64/pinplay-driver.so
 	$(CXX) -g -O3 -fopenmp -I$(SNIPER_ROOT)/include -o matrix-omp matrix-omp.cpp
 
-clean:
+cleanwork:
+	rm -rf work pintool.log
+
+clean: cleanwork
 	$(MAKE) -C $(PINTOOL_ICOUNT_DIR) clean
 	$(MAKE) -C $(PINTOOL_BBV_DIR) clean
 	$(MAKE) -C $(PINTOOL_REUSE_DISTANCE_DIR) clean
-	rm -rf work ./matrix-omp pintool.log
+	rm -f ./matrix-omp
 
 distclean: clean
 	rm -rf SimPoint.3.2 ./simpoint
 
-.PHONY: clean distclean
+.PHONY: cleanwork clean distclean
