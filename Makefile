@@ -1,9 +1,11 @@
 ifeq ($(SNIPER_ROOT),)
  $(error "Please set $$SNIPER_ROOT")
 endif
-ifneq ($(wildcard $(SNIPER_ROOT)/pin_kit/extras/pinplay/examples/pinplay-driver.cpp),)
- PIN_ROOT=$(SNIPER_ROOT)/pin_kit
- export PIN_ROOT
+ifeq ($(PIN_ROOT),)
+ ifneq ($(wildcard $(SNIPER_ROOT)/pin_kit/extras/pinplay/examples/pinplay-driver.cpp),)
+  PIN_ROOT=$(SNIPER_ROOT)/pin_kit
+  export PIN_ROOT
+ endif
 endif
 ifeq ($(PIN_ROOT),)
  $(error "Please set $$PIN_ROOT")
@@ -41,8 +43,8 @@ simpoint:
 	make -C SimPoint.3.2
 	ln -s SimPoint.3.2/bin/simpoint ./simpoint
 
-matrix-omp: $(SNIPER_ROOT)/include/sim_api.h $(PIN_ROOT)/extras/pinplay/bin/intel64/pinplay-driver.so
-	g++ -g -O3 -fopenmp -I$(SNIPER_ROOT)/include -o matrix-omp matrix-omp.cpp
+matrix-omp: matrix-omp.cpp $(SNIPER_ROOT)/include/sim_api.h $(PIN_ROOT)/extras/pinplay/bin/intel64/pinplay-driver.so
+	$(CXX) -g -O3 -fopenmp -I$(SNIPER_ROOT)/include -o matrix-omp matrix-omp.cpp
 
 clean:
 	$(MAKE) -C $(PINTOOL_ICOUNT_DIR) clean
