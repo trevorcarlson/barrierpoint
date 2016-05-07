@@ -110,4 +110,7 @@ if __name__ == '__main__':
     if o == '--prefix':
       prefix = a
 
+  if prefix == None:
+    usage()
+
   run(prefix)
